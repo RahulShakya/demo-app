@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section class="banner-bottom py-5">
+        <div class="container py-md-3">
+            <div class="row grids-wthree-info text-center">
+                <div class="col-lg-4 ab-content">
+                    <div class="ab-info-con">
+                        <h4>Fast & Free Delivery</h4>
+                        <p>Lorem ipsum dolor sit,Nulla pellentesque dolor ipsum laoreet eleifend integer,Pellentesque maximus libero.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 ab-content">
+                    <div class="ab-info-con">
+                        <h4>Safe & Secure Payments</h4>
+                        <p>Lorem ipsum dolor sit,Nulla pellentesque dolor ipsum laoreet eleifend integer,Pellentesque maximus libero.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 ab-content">
+                    <div class="ab-info-con">
+                        <h4>100% Money Back Guarantee</h4>
+                        <p>Lorem ipsum dolor sit,Nulla pellentesque dolor ipsum laoreet eleifend integer,Pellentesque maximus libero.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
   );
 }
 
