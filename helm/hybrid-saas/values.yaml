@@ -1,0 +1,40 @@
+image:
+  repository: hybrid-saas
+  tag: latest
+  pullPolicy: IfNotPresent
+
+replicaCount: 3
+workerReplicaCount: 2
+
+service:
+  type: ClusterIP
+  port: 80
+
+env:
+  DJANGO_ALLOWED_HOSTS: "*"
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: hybrid_saas
+  REDIS_URL: redis://redis:6379/0
+  CELERY_BROKER_URL: redis://redis:6379/1
+  CELERY_RESULT_BACKEND: redis://redis:6379/2
+
+secretEnv:
+  DJANGO_SECRET_KEY: change-me
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 12
+  targetCPUUtilizationPercentage: 65
+
+ingress:
+  enabled: true
+  className: ""
+  hosts:
+    - host: api.example.com
+      paths:
+        - path: /
+          pathType: Prefix

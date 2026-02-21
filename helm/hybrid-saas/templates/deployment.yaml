@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hybrid-saas.fullname" . }}-web
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "hybrid-saas.fullname" . }}-web
+  template:
+    metadata:
+      labels:
+        app: {{ include "hybrid-saas.fullname" . }}-web
+    spec:
+      containers:
+        - name: web
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: {{ include "hybrid-saas.fullname" . }}-config
+            - secretRef:
+                name: {{ include "hybrid-saas.fullname" . }}-secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hybrid-saas.fullname" . }}-worker
+spec:
+  replicas: {{ .Values.workerReplicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "hybrid-saas.fullname" . }}-worker
+  template:
+    metadata:
+      labels:
+        app: {{ include "hybrid-saas.fullname" . }}-worker
+    spec:
+      containers:
+        - name: worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["celery", "-A", "config", "worker", "-l", "info"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "hybrid-saas.fullname" . }}-config
+            - secretRef:
+                name: {{ include "hybrid-saas.fullname" . }}-secret
