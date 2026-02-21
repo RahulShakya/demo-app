@@ -1,0 +1,7 @@
+{{- define "hybrid-saas.name" -}}
+{{- .Chart.Name -}}
+{{- end -}}
+
+{{- define "hybrid-saas.fullname" -}}
+{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

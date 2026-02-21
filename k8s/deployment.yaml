@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hybrid-saas-web
+  namespace: hybrid-saas
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hybrid-saas-web
+  template:
+    metadata:
+      labels:
+        app: hybrid-saas-web
+    spec:
+      containers:
+        - name: web
+          image: hybrid-saas:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: hybrid-saas-config
+            - secretRef:
+                name: hybrid-saas-secret
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/schema/
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hybrid-saas-worker
+  namespace: hybrid-saas
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hybrid-saas-worker
+  template:
+    metadata:
+      labels:
+        app: hybrid-saas-worker
+    spec:
+      containers:
+        - name: worker
+          image: hybrid-saas:latest
+          command: ["celery", "-A", "config", "worker", "-l", "info"]
+          envFrom:
+            - configMapRef:
+                name: hybrid-saas-config
+            - secretRef:
+                name: hybrid-saas-secret
